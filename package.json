@@ -1,0 +1,46 @@
+{
+    "name": "math-editor",
+    "private": true,
+    "description": "A simple unicode math editor",
+    "scripts": {
+        "start": "webpack-dev-server --env dev",
+        "build": "webpack --env prod"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/TarVK/model-react.git"
+    },
+    "keywords": [
+        "React",
+        "unicode editor"
+    ],
+    "author": "Tar van Krieken",
+    "license": "MIT",
+    "bugs": {
+        "url": "https://github.com/TarVK/model-react/issues"
+    },
+    "homepage": "https://github.com/TarVK/model-react#readme",
+    "dependencies": {
+        "@deity/falcon-ui": "^2.4.8",
+        "bezier-js": "^2.6.1",
+        "chevrotain": "^7.0.2",
+        "model-react": "^3.0.0",
+        "react": "^16.12.0",
+        "react-dom": "^16.12.0",
+        "react-router-dom": "5.1.2"
+    },
+    "devDependencies": {
+        "@types/bezier-js": "^0.0.8",
+        "@types/jest": "^26.0.14",
+        "@types/react": "16.9.19",
+        "@types/react-dom": "16.9.5",
+        "@types/react-router-dom": "5.1.3",
+        "jest": "^26.5.2",
+        "ts-jest": "^26.4.1",
+        "ts-loader": "^6.0.2",
+        "typescript": "^3.5.1",
+        "webpack": "^4.32.2",
+        "webpack-cli": "^3.3.2",
+        "webpack-dev-server": "^3.5.0"
+    }
+}
