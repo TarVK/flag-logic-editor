@@ -105,7 +105,4 @@ dist
 
 .parcel-cache/
 
-build/
 dist/
-
-packages/core/data

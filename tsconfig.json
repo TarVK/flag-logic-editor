@@ -4,8 +4,6 @@
         "rootDir": "src/",
         "outDir": "build/",
         "inlineSourceMap": true,
-        "declaration": true,
-        "declarationMap": true,
         "module": "commonjs",
         "target": "ES2019",
         "jsx": "react",
