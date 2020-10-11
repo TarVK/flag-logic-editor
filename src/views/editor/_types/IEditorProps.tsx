@@ -6,6 +6,8 @@ import {ITextField} from "../../../models/textField/_types/ITextField";
 export type IEditorProps = {
     /** The keyboard interaction handler */
     keyboardHandler: IKeyEventListener;
+    /** Whether to listen for key events even if editor isn't selected */
+    globalListener?: boolean;
     /** The text field to highlight from */
     textField: ITextField;
     /** The highlighter to perform the highlight with */

@@ -29,8 +29,10 @@ export const SyntaxHighlighter: LFC<ISyntaxHighlighterProps> = ({
             highlightErrors == false ? nodes : highlightTagErrors(nodes, errors);
 
         // Split the nodes by lines
-        const lines = splitHighlightNodes(errorHighlighted, node =>
-            node.tags.includes("new-line")
+        const lines = splitHighlightNodes(
+            errorHighlighted,
+            node => node.tags.includes("new-line"),
+            true
         );
 
         // Return all nodes
@@ -98,18 +100,26 @@ export const SyntaxHighlighter: LFC<ISyntaxHighlighterProps> = ({
         [onSelectionChange]
     );
 
+    const offsets = useRef({} as Record<string, number>);
+    const prevOffsets = offsets.current;
+    offsets.current = {};
+
     const textID = {} as Record<string, number>;
+    let tagCount = 1;
     return (
         <>
             {lines.map((nodes, i) => {
                 const selectionOffset = nodes[0]?.start ?? 0;
 
+                // Calculate a key
                 const text = nodes.reduce((text, node) => text + node.text, "");
                 if (!textID[text]) textID[text] = 0;
-                let key = `${textID[text]++}-${
-                    highlightErrors ? selectionOffset : 0
-                }-${text}`;
+                let key = `${textID[text]++}-${text}`;
+                if (highlightErrors) offsets.current[key] = selectionOffset;
+                else offsets.current[key] = prevOffsets[key];
+                key = prevOffsets[key] + "-" + key;
 
+                // Calculate selection data
                 const relativeSelection = {
                     start: (selection?.start ?? 0) - selectionOffset,
                     end: (selection?.end ?? 0) - selectionOffset,
@@ -118,6 +128,10 @@ export const SyntaxHighlighter: LFC<ISyntaxHighlighterProps> = ({
                     ? nodes[0]?.start <= selection.end &&
                       nodes[nodes.length - 1]?.end >= selection.end
                     : false;
+
+                // Find the tag
+                let tag = "";
+                if (nodes.find(node => node.tags.includes("TAG"))) tag = `${tagCount++})`;
 
                 const nodesEl = (
                     <SyntaxHighlighterNodes
@@ -141,15 +155,23 @@ export const SyntaxHighlighter: LFC<ISyntaxHighlighterProps> = ({
                         }}
                         onMouseDown={onSelectionChange && onDragStart}
                         onMouseUp={onSelectionChange && onDragEnd.current}>
-                        {selection ? (
-                            <SyntaxHighlighterSelection
-                                selection={relativeSelection}
-                                isEnd={isEnd}>
-                                {nodesEl}
-                            </SyntaxHighlighterSelection>
-                        ) : (
-                            nodesEl
-                        )}
+                        <span style={{display: "inline-block", width: 35}}>{tag}</span>
+                        <span
+                            style={{
+                                display: "inline-block",
+                                position: "relative",
+                                minHeight: "1em",
+                            }}>
+                            {selection ? (
+                                <SyntaxHighlighterSelection
+                                    selection={relativeSelection}
+                                    isEnd={isEnd}>
+                                    {nodesEl}
+                                </SyntaxHighlighterSelection>
+                            ) : (
+                                nodesEl
+                            )}
+                        </span>
                     </div>
                 );
             })}

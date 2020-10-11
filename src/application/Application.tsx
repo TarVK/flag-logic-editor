@@ -12,12 +12,32 @@ import {createKeyHandler} from "./createKeyHandler";
 import {IHighlighter} from "../models/textField/syntax/_types/IHighlighter";
 import {createHighlighter} from "./createHighlighter";
 import {symbols} from "./symbols";
+import {KeyHandler} from "../controllers/keyEventHandler/KeyHandler";
+import {exampleInput} from "./exampleInput";
 
 export const Application: LFC = () => {
     // Create a text field
     const textFieldRef = useRef<ITextField>();
-    if (!textFieldRef.current)
-        textFieldRef.current = new TextField("hoi^45 is cool \n shits");
+    if (!textFieldRef.current) {
+        const text = localStorage.getItem("content") || exampleInput;
+        const textField = (textFieldRef.current = new TextField(text));
+        const save = () => {
+            let remover: () => void;
+            localStorage.setItem(
+                "content",
+                textField.get({
+                    call: () => {
+                        remover?.();
+                        save();
+                    },
+                    registerRemover: r => {
+                        remover = r;
+                    },
+                })
+            );
+        };
+        save();
+    }
     const textField = textFieldRef.current;
 
     // Create a key handler
@@ -52,6 +72,17 @@ export const Application: LFC = () => {
         );
     }, []);
 
+    // highlighter switcher
+    const [usePlainHighlighter, setUsePlainHighlighter] = useState(false);
+
+    useEffect(() => {
+        const handler = new KeyHandler(window);
+        handler.listen(e => {
+            if (e.is("esc")) setUsePlainHighlighter(h => !h);
+        });
+        return () => handler.destroy();
+    }, []);
+
     return (
         <Box
             css={{
@@ -65,8 +96,10 @@ export const Application: LFC = () => {
             }}>
             <Editor
                 textField={textField}
+                globalListener={true}
                 keyboardHandler={keyHandler}
-                highlighter={highlighter || plaintextLexer}
+                key={usePlainHighlighter ? "1" : "2"}
+                highlighter={(!usePlainHighlighter && highlighter) || plaintextLexer}
                 setErrors={e => e.length > 0 && console.log(e)}
             />
         </Box>

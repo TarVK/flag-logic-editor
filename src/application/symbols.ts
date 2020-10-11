@@ -31,5 +31,25 @@ export const symbols: ISymbolDefinition[] = [
     {pattern: "=>", name: "IMPLIES", text: "⇒"},
 
     // Structure
-    {pattern: "|", name: "POLE", text: "", css: {borderLeft: "2px solid black"}},
+    {
+        pattern: "|",
+        name: "POLE",
+        text: "",
+        css: {
+            "::after": {
+                borderLeft: "2px solid black",
+                top: 0,
+                bottom: 0,
+                position: "absolute",
+                content: "''",
+            },
+        },
+    },
+    {
+        pattern: "TAG",
+        name: "TAG",
+        css: {
+            display: "none",
+        },
+    },
 ];

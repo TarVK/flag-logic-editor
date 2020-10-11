@@ -65,6 +65,7 @@ export class KeyHandler {
             insertHeldKeys?: boolean;
         } = {}
     ): void {
+        console.log(event);
         if (event.type == "up" && store) delete this.pressedKeys[event.key.id];
         if (insertHeldKeys) event.setHeldKeys(Object.values(this.pressedKeys));
         if (event.type != "up" && store) this.pressedKeys[event.key.id] = event.key;
@@ -108,10 +109,6 @@ export class KeyHandler {
                 listener = listener.emit.bind(listener) as IKeyEventListenerFunction;
             listener(event);
         });
-
-        event.original?.stopImmediatePropagation();
-        event.original?.stopPropagation();
-        event.original?.preventDefault();
     }
 
     /**

@@ -8,6 +8,7 @@ import {jumpCursor} from "../actions/jumpCursor";
  * @param event The event to test
  * @param textField The text field to perform the event for
  * @param patterns The key patterns to detect, or the base settings to extract them from
+ * @param endMatchers Determines the position to jump to
  * @returns Whether the event was caught
  */
 export function handleCursorJumpInput(
@@ -18,14 +19,28 @@ export function handleCursorJumpInput(
         home: KeyPattern;
         selectAll: KeyPattern;
         expandSelection: KeyPattern;
+    },
+    endMatchers?: {
+        start?: RegExp;
+        end?: RegExp;
     }
 ): void | boolean {
     if (patterns.end.matches(event)) {
-        jumpCursor(textField, {dx: 1}, patterns.expandSelection.matchesModifier(event));
+        jumpCursor(
+            textField,
+            {dx: 1},
+            patterns.expandSelection.matchesModifier(event),
+            endMatchers
+        );
         return true;
     }
     if (patterns.home.matches(event)) {
-        jumpCursor(textField, {dx: -1}, patterns.expandSelection.matchesModifier(event));
+        jumpCursor(
+            textField,
+            {dx: -1},
+            patterns.expandSelection.matchesModifier(event),
+            endMatchers
+        );
         return true;
     }
     if (patterns.selectAll.matches(event)) {

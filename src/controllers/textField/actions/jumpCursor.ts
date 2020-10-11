@@ -6,11 +6,16 @@ import {get1dIndex, get2dIndex, getTextLines} from "../utils/rangeConversion";
  * @param textField The text field ot move the cursor for
  * @param direction The movement direction
  * @param expandSelection Whether to alter the current text selection
+ * @param endMatchers Determines the position to jump to
  */
 export function jumpCursor(
     textField: ITextField,
     direction: {dx?: number; dy?: number},
-    expandSelection?: boolean
+    expandSelection?: boolean,
+    endMatchers?: {
+        start?: RegExp;
+        end?: RegExp;
+    }
 ): void {
     const selection = textField.getSelection();
     const text = textField.get();
@@ -25,8 +30,27 @@ export function jumpCursor(
         else endPoint.row = 0;
     }
     if (direction.dx) {
-        if (direction.dx > 0) endPoint.column = lines[endPoint.row].length;
-        else endPoint.column = 0;
+        const line = lines[endPoint.row];
+        if (direction.dx > 0) {
+            let c = line.length;
+            if (endMatchers?.end) {
+                const m = line.match(endMatchers.end);
+                if (m && m.index !== undefined && endPoint.column != m.index) c = m.index;
+            }
+            endPoint.column = c;
+        } else {
+            let c = 0;
+            if (endMatchers?.start) {
+                const m = line.match(endMatchers.start);
+                if (
+                    m &&
+                    m.index !== undefined &&
+                    endPoint.column != m.index + m[0].length
+                )
+                    c = m.index + m[0].length;
+            }
+            endPoint.column = c;
+        }
     }
 
     // Convert back to 1d index representation

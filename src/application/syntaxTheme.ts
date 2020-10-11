@@ -4,7 +4,7 @@ export const syntaxTheme: Record<
 > = {
     // Editor
     selection: {backgroundColor: "blue", opacity: 0.2},
-    cursor: {backgroundColor: "black", opacity: 1, width: 2},
+    cursor: {borderLeft: "1px solid black", borderRight: "1px solid white"},
     error: {backgroundColor: "red", color: "white", display: "inline !important"},
     empty: {display: "inline-block", width: 3, top: 0, bottom: 0, position: "absolute"},
 
