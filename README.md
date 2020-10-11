@@ -6,6 +6,8 @@ This can get a little confusing, since it hides part of the actual text, but it'
 This project is developed in a big rush (over a time span of ~2 days), since it's needed for personal usage. A lot of the code is scraped together and altered code from another project: [LaunchMenu](https://github.com/LaunchMenu/LaunchMenu).
 This project won't be maintained after creation. Instead a proper applet will be made for LaunchMenu in the (far) future. This will have proper maintainable code, and not suffer from all the performance issues that this version has.
 
+It can be used here: https://tarvk.github.io/math-editor/build/
+
 Example:
 
 ![teaser image](teaser.png)
