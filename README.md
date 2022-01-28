@@ -1,4 +1,4 @@
-# math-editor
+# flag-logic-editor
 
 A simple editor that immediately renders the markup text.
 This can get a little confusing, since it hides part of the actual text, but it's quite convenient when just making some quick drafts, since it's way faster than using latex.
